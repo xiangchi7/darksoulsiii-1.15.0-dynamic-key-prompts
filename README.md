@@ -4,11 +4,11 @@ Shows the **keyboard / mouse key you actually bound** instead of the gamepad but
 
 An unofficial port of Dynamic Key Prompts 0.1.4 to the 1.15.0 executable: upstream version 0.1.4, rebuilt for game version 1.15.0. **1.15.0 only.**
 
-This repository holds the install-ready build.
+The install-ready build is in **Releases** ([`DynamicKeyPrompts-0.1.4-ds3-1.15.0.zip`](../../releases/latest)); this repository holds the description and the licences.
 
 ## Install
 
-Copy both items next to `DarkSoulsIII.exe` (`...\DARK SOULS III\Game\`), then start the game from Steam:
+Download `DynamicKeyPrompts-0.1.4-ds3-1.15.0.zip` from Releases, extract it, then copy both items next to `DarkSoulsIII.exe` (`...\DARK SOULS III\Game\`), and start the game from Steam:
 
 ```
 Game\xinput1_3.dll
@@ -46,7 +46,7 @@ Dynamic Key Prompts 0.1.4 by HappyEntity — MIT, see [LICENSE](LICENSE). MinHoo
 
 把提示里的手柄按键换成你实际绑定的键鼠按键。这是 Dynamic Key Prompts 0.1.4 针对《黑暗之魂3》1.15.0 重新编译的版本，**仅支持 1.15.0**。
 
-安装：把 `xinput1_3.dll` 和 `DynamicKeyPrompts` 文件夹放进 `...\DARK SOULS III\Game\`（与 `DarkSoulsIII.exe` 同级），从 Steam 正常启动即可。卸载就是删掉这两样。若别的 mod 已占用 `xinput1_3.dll`，两者不能共存。
+安装：从 Releases 下载 `DynamicKeyPrompts-0.1.4-ds3-1.15.0.zip` 解压，把 `xinput1_3.dll` 和 `DynamicKeyPrompts` 文件夹放进 `...\DARK SOULS III\Game\`（与 `DarkSoulsIII.exe` 同级），从 Steam 正常启动即可。卸载就是删掉这两样。若别的 mod 已占用 `xinput1_3.dll`，两者不能共存。
 
 设置看 `DynamicKeyPrompts\DynamicKeyPrompts.ini`：`Style=text` 显示 `[E]` 这样的文字，`icons` 显示按键图标；`Labels` 控制同时有键鼠绑定时显示哪一个；`Color` 是文字颜色。
 

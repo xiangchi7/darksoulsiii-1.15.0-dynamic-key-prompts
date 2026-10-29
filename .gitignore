@@ -1,0 +1,5 @@
+# install payload ships in the Release zip, not in git
+DynamicKeyPrompts/
+xinput1_3.dll
+*.log
+*.zip
