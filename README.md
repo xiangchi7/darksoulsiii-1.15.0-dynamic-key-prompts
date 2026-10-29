@@ -1,98 +1,53 @@
-# Dynamic Key Prompts 0.1.4 — ported to Dark Souls III 1.15.0 (drop-in build)
+# Dynamic Key Prompts 0.1.4 — Dark Souls III 1.15.0
 
-Replaces gamepad button prompts with the keyboard/mouse keys you actually bound.
-This build is recompiled for the 1.15.0 executable and carries two adaptations so
-it can be installed the same way as the original mod.
+Shows the **keyboard / mouse key you actually bound** instead of the gamepad button in prompts.
 
-Versioning: the release tag `v0.1.4-ds3-1.15.0` means **upstream version 0.1.4,
-ported to game version 1.15.0**.
+An unofficial port of Dynamic Key Prompts 0.1.4 to the 1.15.0 executable: upstream version 0.1.4, rebuilt for game version 1.15.0. **1.15.0 only.**
 
-## Installation (same as the original mod)
+This repository holds the install-ready build.
 
-Copy these two items next to `DarkSoulsIII.exe`:
+## Install
 
-| Item | Destination |
-|---|---|
-| `xinput1_3.dll` | `...\DARK SOULS III\Game\xinput1_3.dll` |
-| `DynamicKeyPrompts\` | `...\DARK SOULS III\Game\DynamicKeyPrompts\` |
-
-i.e.
+Copy both items next to `DarkSoulsIII.exe` (`...\DARK SOULS III\Game\`), then start the game from Steam:
 
 ```
-...\DARK SOULS III\Game\xinput1_3.dll
-...\DARK SOULS III\Game\DynamicKeyPrompts\DynamicKeyPrompts.dll
-...\DARK SOULS III\Game\DynamicKeyPrompts\DynamicKeyPrompts.ini
+Game\xinput1_3.dll
+Game\DynamicKeyPrompts\DynamicKeyPrompts.dll
+Game\DynamicKeyPrompts\DynamicKeyPrompts.ini
 ```
-
-Then start the game from Steam as usual. No launcher script is needed.
 
 **Uninstall:** delete `xinput1_3.dll` and the `DynamicKeyPrompts` folder.
+If another mod already occupies `xinput1_3.dll`, the two cannot be installed together.
 
-> **Note:** if another mod already uses `xinput1_3.dll`, rename it and use a
-> `dinput8.dll` variant instead. This package's loader is an `xinput1_3` proxy.
-
-## Two key changes vs. the official 0.1.4
-
-### 1. Loader (`xinput1_3.dll`, upstream `src/Loader/dllmain.cpp`)
-
-Detects the 1.15.0 executable (PE `TimeDateStamp` `0x598A43EF`) and skips
-dearxan's entry-point blocking (dearxan uses 1.15.2-specific addresses and crashes
-1.15.0), starting the core once the game's own code runs instead. So 1.15.0 no
-longer crashes.
-
-### 2. Icon-mode keycap atlas (upstream `src/Games/Ds3/KeyIcons.cs`)
-
-The carrier was changed from `menu/05_dummy.tpf.dcx` to `menu/01_common.tpf.dcx`.
-
-Reason: the gamepad button icons (`KG_OK` etc.) live in `01_common` (the
-always-loaded HUD atlas), while `05_dummy` is only loaded while a menu is open.
-With the keycaps in `01_common`, the centered interaction prompt
-("Rest at bonfire" / "Talk") now shows the `E` keycap too.
-
-## All 1.15.0 addresses (`src/Games/Ds3/Rva.cs`)
-
-| Symbol | 1.15.0 value | Note |
-|---|---|---|
-| `ExpectedTimeDateStamp` | `0x598A43EF` | official 1.15.2: `0x639C4DDD` |
-| `KeyConfig` | `0x4740090` | static pointer to the `CSPcKeyConfig` singleton |
-| `GetMsg` | `0x23458A0` | message repository lookup |
-| `ReplaceTag` | `0xA5CEB0` | replaces one tutorial tag in a message |
-| `MarkupBuilderReturn` | `0xA5CD4C` | return address inside the icon markup builder |
-| `MenuTagsBegin` / `MenuTagsEnd` | `0xAB75C0` / `0xAB8518` | menu-tag registry |
-| `ActionListPrompt` | `0xA5B9B3` | estimated; "Rest at bonfire" action list |
-| `KeyBindingsPadIcon1/2/3` | `0xA37525` / `0xAAFF7E` / `0xAB3378` | Key Bindings screen, controller column |
-| `PathReplace` | `0x7D5E0` | `DLString` replace used by the virtual file system |
-| `LooseFileCheckCall` | `0xE93D33` | call removed so loose files can load |
-
-## Configuration
+## Settings
 
 `DynamicKeyPrompts\DynamicKeyPrompts.ini`:
 
 | Key | Values |
 |---|---|
 | `Enabled` | `0` = the mod does nothing |
+| `Style` | `text` = key names as text, e.g. `[E]` · `icons` = key icons (cached in `DynamicKeyPrompts\cache\ds3`) |
+| `IconTheme` | icon look: `dark` / `minimal` / `silver` |
+| `Labels` | when an action has both a key and a mouse button: `auto` / `keyboard` / `mouse` / `both` |
+| `Format` | text only; `{0}` is the key name, e.g. `[{0}]` → `[E]` |
+| `Separator` | between the keys of a stick / d-pad prompt |
+| `Color` | key label colour `RRGGBB`, empty = normal text colour |
 | `Diagnostics` | `1` = more detailed `DynamicKeyPrompts.log` |
-| `Style` | `icons` — key / mouse icons (written to `DynamicKeyPrompts\cache\ds3` on first use); `text` — key names as text, e.g. `[E]` |
-| `IconTheme` | keycap look: `dark` (stone plate, bronze rim) / `minimal` (frame only) / `silver` |
-| `Labels` | which binding to show when an action has both a key and a mouse button: `auto` / `keyboard` / `mouse` / `both` |
-| `Format` | text style only; `{0}` is the key name, e.g. `[{0}]` → `[E]` |
-| `Separator` | between keys of a stick / d-pad prompt when names are longer than one letter |
-| `Color` | optional key label colour, `RRGGBB`; empty = normal text colour |
 
-## Files
+## About this port
 
-| File | Purpose |
-|---|---|
-| `xinput1_3.dll` | loader (skips dearxan on 1.15.0) — ships in the release, not in this repository |
-| `DynamicKeyPrompts\DynamicKeyPrompts.dll` | core (11 relocated addresses + `01_common` atlas) — ships in the release |
-| `DynamicKeyPrompts\DynamicKeyPrompts.ini` | configuration — ships in the release |
-| `src/Loader/dllmain.cpp` | modified loader source |
-| `src/Games/Ds3/KeyIcons.cs` | modified core source (keycap atlas carrier) |
-| `src/Games/Ds3/Prompts.cs` | modified core source |
-| `src/Games/Ds3/Rva.cs` | modified core source (1.15.0 addresses) |
-| `LICENSE` | MIT license of Dynamic Key Prompts (c) 2026 HappyEntity |
-| `LICENSE-MinHook.txt` | BSD 2-Clause licenses of MinHook and the Hacker Disassembler Engine |
+Two changes to 0.1.4: the loader detects the 1.15.0 executable and skips the upstream entry-point blocking (it used 1.15.2 addresses and crashed 1.15.0); and the keycap atlas moved to the always-loaded `menu/01_common.tpf.dcx`, so the centred prompt ("Rest at bonfire", "Talk") shows the keycap too.
 
-The `src/` tree contains only the **modified** files, laid out with their upstream
-paths. The full upstream projects are not included, so these four files cannot be
-built on their own.
+## Credits
+
+Dynamic Key Prompts 0.1.4 by HappyEntity — MIT, see [LICENSE](LICENSE). MinHook and the Hacker Disassembler Engine are BSD 2-Clause — see [LICENSE-MinHook.txt](LICENSE-MinHook.txt). This port is unofficial and not affiliated with the author.
+
+## 中文
+
+把提示里的手柄按键换成你实际绑定的键鼠按键。这是 Dynamic Key Prompts 0.1.4 针对《黑暗之魂3》1.15.0 重新编译的版本，**仅支持 1.15.0**。
+
+安装：把 `xinput1_3.dll` 和 `DynamicKeyPrompts` 文件夹放进 `...\DARK SOULS III\Game\`（与 `DarkSoulsIII.exe` 同级），从 Steam 正常启动即可。卸载就是删掉这两样。若别的 mod 已占用 `xinput1_3.dll`，两者不能共存。
+
+设置看 `DynamicKeyPrompts\DynamicKeyPrompts.ini`：`Style=text` 显示 `[E]` 这样的文字，`icons` 显示按键图标；`Labels` 控制同时有键鼠绑定时显示哪一个；`Color` 是文字颜色。
+
+代码与美术版权归原作者 HappyEntity（MIT）。
